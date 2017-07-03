@@ -4,6 +4,7 @@ import time
 import email.message
 import threading
 import Queue
+import base64
 from imapclient import IMAPClient
 
 parser = argparse.ArgumentParser()
@@ -75,7 +76,7 @@ def upload_to_gmail():
             msg['Subject'] = remote_id
             msg['From'] = username
             msg['To'] = username
-            msg.set_payload(total_data)
+            msg.set_payload(base64.b64encode(total_data))
             server.append(folder, msg.as_string())
 
 
@@ -93,7 +94,7 @@ def check_gmail():
             for_deletion = []
             for msgid, data in response.iteritems():
                 if instance_id in data['BODY[HEADER.FIELDS (SUBJECT)]']:
-                    outqueue.put_nowait(data['BODY[TEXT]'])
+                    outqueue.put_nowait(base64.b64decode(data['BODY[TEXT]']))
                     print "Data received via GMail, sending"
                     for_deletion.append(msgid)
             server.delete_messages(for_deletion)
