@@ -13,9 +13,10 @@ parser.add_argument("-u", "--username", help="username for gmail account")
 parser.add_argument("-k", "--password", help="password to gmail account")
 parser.add_argument("-i", "--id", help='ID of system')
 parser.add_argument("-r", "--remoteid", help='ID of the remote system')
+parser.add_argument("-s", "--server", help='IMAP server to communicate with', default='imap.gmail.com')
 args = parser.parse_args()
 
-host = 'imap.gmail.com'
+host = args.server
 username = args.username
 password = args.password
 folder = "[Gmail]/Drafts"
